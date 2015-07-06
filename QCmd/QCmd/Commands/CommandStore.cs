@@ -18,13 +18,23 @@ namespace QCmd.Commands
             _scripts = new Dictionary<string, string>();
         }
 
+        public void AddScript(EngineWrapper engine, string file)
+        {
+            
+        }
+
         public void LoadScripts(EngineWrapper engine, string dir)
         {
+            _scripts.Clear();
+
             LoadDirectory(dir);
             foreach (var script in _scripts)
             {
                 engine.Execute(File.ReadAllText(script.Value));
             }
+
+            engine.AddHardCommand("reload", () => LoadScripts(engine, dir));
+            _scripts.Add("reload", "hard");
         }
 
         public void LoadDirectory(string dir)

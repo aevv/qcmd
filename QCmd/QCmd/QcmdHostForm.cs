@@ -31,7 +31,8 @@ namespace QCmd
             _hook.KeyPressed += KeyPressed;
 
             _hook.RegisterHotKey(KeyboardHook.ModifierKeys.Win, Keys.Q);
-            
+            _hook.RegisterHotKey(KeyboardHook.ModifierKeys.Control | KeyboardHook.ModifierKeys.Alt, Keys.NumPad8);
+
             _browser = new BrowserWrapper(config.StartPage);
             _browser.HideCallback = ThreadedHide;
             Controls.Add(_browser.Control);
@@ -44,6 +45,12 @@ namespace QCmd
 
         public void KeyPressed(object sender, KeyboardHook.KeyPressedEventArgs args)
         {
+            if (args.Key == Keys.NumPad8)
+            {
+                Close();
+                return;
+            }
+
             ToggleVisibility();
             FocusInput();
         }
@@ -62,7 +69,7 @@ namespace QCmd
 
         private void FocusInput()
         {
-            Focus();
+            Activate();
             _browser.Focus();
         }
 
