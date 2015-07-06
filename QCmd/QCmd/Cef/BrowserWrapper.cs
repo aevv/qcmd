@@ -15,6 +15,7 @@ namespace QCmd.Cef
         private readonly ChromiumWebBrowser _browser;
         public ChromiumWebBrowser Control { get { return _browser; } }
         private readonly QCmdHandler _handler;
+        public Action HideCallback {set { _handler.HideCallback = value; } }
 
         public BrowserWrapper(string url)
         {

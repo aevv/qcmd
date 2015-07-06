@@ -30,9 +30,10 @@ namespace QCmd
             _hook = new KeyboardHook();
             _hook.KeyPressed += KeyPressed;
 
-            _hook.RegisterHotKey(KeyboardHook.ModifierKeys.Alt | KeyboardHook.ModifierKeys.Control, Keys.NumPad7);
+            _hook.RegisterHotKey(KeyboardHook.ModifierKeys.Win, Keys.Q);
             
             _browser = new BrowserWrapper(config.StartPage);
+            _browser.HideCallback = ThreadedHide;
             Controls.Add(_browser.Control);
 
             Closed += (o, s) => CefSharp.Cef.Shutdown();
@@ -63,6 +64,11 @@ namespace QCmd
         {
             Focus();
             _browser.Focus();
+        }
+
+        private void ThreadedHide()
+        {
+            Invoke(new MethodInvoker(Hide));
         }
     }
 }

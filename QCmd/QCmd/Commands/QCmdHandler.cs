@@ -11,6 +11,7 @@ namespace QCmd.Commands
     {
         private readonly CommandStore _store;
         private readonly EngineWrapper _wrapper;
+        public Action HideCallback { get; set; }
 
         public QCmdHandler(CommandStore store, EngineWrapper wrapper)
         {
@@ -23,14 +24,24 @@ namespace QCmd.Commands
         public void HandleCommand(string command)
         {
             var parser = new CommandParser();
-            var qcmds = parser.Parse(command);
+            var qcmds = parser.Parse(command).ToList();
+
+            if (!qcmds.Any())
+            {
+                HideCallback();
+                return;
+            }
 
             foreach (var cmd in qcmds)
             {
-                if (_store.HasScript(cmd.Command))
-                {
-                    _wrapper.Invoke(cmd.Command, string.Join(" ", cmd.Parameters));
-                }
+                if (cmd.HideOnFinish)
+                    if (HideCallback != null)
+                        HideCallback();
+
+                if (!_store.HasScript(cmd.Command))
+                    continue;
+
+                _wrapper.Invoke(cmd.Command, string.Join(" ", cmd.Parameters));
             }
         }
     }

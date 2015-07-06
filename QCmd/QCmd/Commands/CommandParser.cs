@@ -80,11 +80,15 @@ namespace QCmd.Commands
             {
                 currentCommand.Command = command.Substring(index, command.Length - index).Trim();
                 if (currentCommand.Command != " " || currentCommand.Command != ";")
-                commands.Add(currentCommand);
+                {
+                    currentCommand.HideOnFinish = true;
+                    commands.Add(currentCommand);
+                }
             }
             else if (index != command.Length)
             {
                 currentCommand.Parameters.Add(command.Substring(index, command.Length - index).Trim());
+                currentCommand.HideOnFinish = true;
                 commands.Add(currentCommand);
             }
 

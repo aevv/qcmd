@@ -10,6 +10,7 @@ namespace QCmd.Commands
     {
         public string Command { get; set; }
         public IList<string> Parameters { get; set; }
+        public bool HideOnFinish { get; set; }
 
         public QCommandDefinition()
         {
