@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using CefSharp;
 using CefSharp.WinForms;
+using QCmd.Commands;
+using QCmd.Scripts;
 
 namespace QCmd.Cef
 {
@@ -12,6 +14,7 @@ namespace QCmd.Cef
     {
         private readonly ChromiumWebBrowser _browser;
         public ChromiumWebBrowser Control { get { return _browser; } }
+        private readonly QCmdHandler _handler;
 
         public BrowserWrapper(string url)
         {
@@ -30,7 +33,9 @@ namespace QCmd.Cef
                 TabToLinksDisabled = true
             };
 
-            _browser.RegisterJsObject("qcmd", new QCmdCallback(), false);
+            _handler = new QCmdHandler(new CommandStore(), new EngineWrapper());
+
+            _browser.RegisterJsObject("qcmd", new QCmdCallback(_handler), false);
         }
 
         public void Focus()
